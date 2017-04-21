@@ -43,9 +43,9 @@ for r = 1:row
                 key_o(2,i) = ~key_o(2,i-1);
             end
         end
-        fprintf(key_out, '%g\t',key_o(1,:));
+        fprintf(key_out, '%g\t',fliplr(key_o(1,:)));
         fprintf(key_out, '\t or \t');
-        fprintf(key_out, '%g\t',key_o(2,:));
+        fprintf(key_out, '%g\t',fliplr(key_o(2,:)));
         fprintf(key_out, '\r\n');
     end
 end
