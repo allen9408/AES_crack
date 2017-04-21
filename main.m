@@ -10,6 +10,7 @@ file_in = textread('input.txt');
 
 text_out = fopen('text_out.txt', 'w+');
 cap_out = fopen('cap_out.txt', 'w+');
+key_out = fopen('key_out.txt', 'w+');
 
 for r = 1:row
 	plaintext = file_in(r, :)';
@@ -25,13 +26,28 @@ for r = 1:row
 		end
 	end
 
-	[cap, lfsr_reg] = tsc(plaintext, key, lfsr_reg);
-
+	[cap(r,:), lfsr_reg] = tsc(plaintext, key, lfsr_reg,r);
 	fprintf(text_out, '%g\t', ciphertext);
 	fprintf(text_out, '\r\n');
-	fprintf(cap_out, '%g\t', cap);
+	fprintf(cap_out, '%g\t', cap(r,:));
 	fprintf(cap_out, '\r\n');
-
+    if (mod(r,2) == 0)
+        key_o(1,1) = 0;
+        key_o(2,1) = 1;
+        for i = 2:8
+            if cap(r,i-1) == cap(r-1, i)
+                key_o(1,i) = key_o(1,i-1); 
+                key_o(2,i) = key_o(2,i-1);
+            else
+                key_o(1,i) = ~key_o(1,i-1);
+                key_o(2,i) = ~key_o(2,i-1);
+            end
+        end
+        fprintf(key_out, '%g\t',key_o(1,:));
+        fprintf(key_out, '\t or \t');
+        fprintf(key_out, '%g\t',key_o(2,:));
+        fprintf(key_out, '\r\n');
+    end
 end
 % plaintext_hex = {'00' '11' '22' '33' '44' '55' '66' '77' ...
 % 				'88' '99' 'aa' 'bb' 'cc' 'dd' 'ee' 'ff'};

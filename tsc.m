@@ -1,8 +1,10 @@
-function [cap, reg_out] = tsc(plaintext, key, reg_in)
+function [cap, reg_out] = tsc(plaintext, key, reg_in,r)
 	reg_out = lfsr(plaintext, reg_in);
+    shift = mod(fix((r-1)/2),16) + 1
 	for i = 1:8
 		mask = 2^i;
-		cap(i) = bitshift(bitxor(mod(plaintext(16),mask), mod(key(16), mask)), -(i-1)); 
+        key_bit = bitshift(mod(key(shift),mask), -(i-1));
+		cap(i) = bitxor(reg_out(i),key_bit); 
 	end
 end
 
