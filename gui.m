@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
 % Edit the above text to modify the response to help gui
 
-% Last Modified by GUIDE v2.5 21-Apr-2017 12:52:20
+% Last Modified by GUIDE v2.5 22-Apr-2017 00:57:01
 m = 5;
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -116,7 +116,21 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 str = get(handles.edit2, 'String');
-msgbox(str);
+iteration = str2num(get(handles.text7, 'String'));
+file_in = textread('input.txt');
+[row,col] = size(file_in);
+
+iteration = mod(iteration,row)+1;
+plaintext = file_in(iteration,:);
+if (iteration == row)
+    iteration = 1;
+else
+    iteration = iteration + 1;
+end
+nexttext = file_in(iteration,:);
+set(handles.edit2, 'String', num2str(plaintext));
+set(handles.edit3, 'String', num2str(nexttext));
+% msgbox(str);
 
 
 % --- Executes on button press in pushbutton2.
@@ -125,8 +139,10 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 key_crack = zeros(32,8) - 1;
+pushbutton1_Callback(hObject, eventdata, handles);
 iteration = str2num(get(handles.text7, 'String')) + 1;
 set(handles.text7, 'String', iteration);
+
 plaintext = get(handles.edit2, 'String');
 plaintext_dec = str2num(plaintext);
 key_hex = {'00' '01' '02' '03' '04' '05' '06' '07' ...
@@ -143,8 +159,9 @@ if (iteration == 1)
 end
 
 cap_out = fopen('cap_out.txt', 'at');
-
+[row,col] = size(file_in);
 for r = 1:iteration
+    r = mod(r-1, row) + 1;
     plaintext = file_in(r, :);
     if (r == 1)
 		% Initial TSC reg[19:0] = data[19:0]
@@ -162,7 +179,7 @@ fprintf(cap_out, '%g\t', cap(r,:));
 fprintf(cap_out, '\r');
 fclose(cap_out);
 % Display leaked information
-set(handles.text11, 'String', num2str(cap(iteration,:)));
+set(handles.text11, 'String', num2str(cap(r,:)));
 % Decode information
 for i = 1:iteration
     if i>32
@@ -215,3 +232,114 @@ set(handles.text65 , 'String', num2str(fliplr(key_crack(29, :))));
 set(handles.text66 , 'String', num2str(fliplr(key_crack(30, :))));
 set(handles.text67 , 'String', num2str(fliplr(key_crack(31, :))));
 set(handles.text68 , 'String', num2str(fliplr(key_crack(32, :))));
+
+
+
+function edit3_Callback(hObject, eventdata, handles)
+% hObject    handle to edit3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit3 as text
+%        str2double(get(hObject,'String')) returns contents of edit3 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit3_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in pushbutton3.
+function pushbutton3_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% Keep Running
+iteration = str2num(get(handles.edit4,'String'));
+for i = 1:iteration
+    pushbutton2_Callback(hObject, eventdata, handles);
+end
+
+% --- Executes on button press in pushbutton4.
+function pushbutton4_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% RESET
+set(handles.text7, 'String', '0');
+set(handles.edit2, 'String', '0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0');
+set(handles.edit3, 'String', '0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0');
+set(handles.text9, 'String', '0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0');
+set(handles.text11, 'String','');
+set(handles.text13 , 'String', '');
+set(handles.text14 , 'String', '');
+set(handles.text15 , 'String', '');
+set(handles.text16 , 'String', '');
+set(handles.text37 , 'String', '');
+set(handles.text38 , 'String', '');
+set(handles.text39 , 'String', '');
+set(handles.text40 , 'String', '');
+set(handles.text41 , 'String', '');
+set(handles.text42 , 'String', '');
+set(handles.text43 , 'String', '');
+set(handles.text44 , 'String', '');
+set(handles.text45 , 'String', '');
+set(handles.text46 , 'String', '');
+set(handles.text47 , 'String', '');
+set(handles.text48 , 'String', '');
+set(handles.text53 , 'String', '');
+set(handles.text54 , 'String', '');
+set(handles.text55 , 'String', '');
+set(handles.text56 , 'String', '');
+set(handles.text57 , 'String', '');
+set(handles.text58 , 'String', '');
+set(handles.text59 , 'String', '');
+set(handles.text60 , 'String', '');
+set(handles.text61 , 'String', '');
+set(handles.text62 , 'String', '');
+set(handles.text63 , 'String', '');
+set(handles.text64 , 'String', '');
+set(handles.text65 , 'String', '');
+set(handles.text66 , 'String', '');
+set(handles.text67 , 'String', '');
+set(handles.text68 , 'String', '');
+
+
+function edit4_Callback(hObject, eventdata, handles)
+% hObject    handle to edit4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit4 as text
+%        str2double(get(hObject,'String')) returns contents of edit4 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit4_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in togglebutton1.
+function togglebutton1_Callback(hObject, eventdata, handles)
+% hObject    handle to togglebutton1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of togglebutton1
+AboutMe();
