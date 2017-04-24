@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
 % Edit the above text to modify the response to help gui
 
-% Last Modified by GUIDE v2.5 22-Apr-2017 00:57:01
+% Last Modified by GUIDE v2.5 24-Apr-2017 16:03:51
 m = 5;
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -145,9 +145,8 @@ set(handles.text7, 'String', iteration);
 
 plaintext = get(handles.edit2, 'String');
 plaintext_dec = str2num(plaintext);
-key_hex = {'00' '01' '02' '03' '04' '05' '06' '07' ...
-			'08' '09' '0a' '0b' '0c' '0d' '0e' '0f'};
-key = hex2dec(key_hex);
+% key_hex = get(handles.edit5, 'String');
+key = str2num(get(handles.edit5, 'String'));
 [s_box, inv_s_box, w, poly_mat, inv_poly_mat] = aes_init(key);
 lfsr_reg = zeros(20, 1);
 ciphertext = cipher(plaintext_dec, w ,s_box, poly_mat);
@@ -343,3 +342,26 @@ function togglebutton1_Callback(hObject, eventdata, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of togglebutton1
 AboutMe();
+
+
+
+function edit5_Callback(hObject, eventdata, handles)
+% hObject    handle to edit5 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit5 as text
+%        str2double(get(hObject,'String')) returns contents of edit5 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit5_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit5 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
